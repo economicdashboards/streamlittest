@@ -3,6 +3,7 @@ import sys
 import time
 import streamlit as st
 import logging
+import mysql.connector
 from time import sleep
 
 def todigits(s, n):
@@ -15,7 +16,12 @@ def datestring():
   ct = datetime.datetime.now()
   dt = todigits(str(ct.year),4) + '-' + todigits(str(ct.month),2)+ '-' + todigits(str(ct.day),2)+ '-' + todigits(str(ct.hour),2)+ '-' + todigits(str(ct.minute),2)+ '-' + todigits(str(ct.second),2)
   return dt
-
+connection = mysql.connector.connect(host='sql5.freemysqlhosting.net',
+                                         database='sql5521302',
+                                         user='sql5521302',
+                                         password='TvCHYlcKBJ'
+                                  )
+connection.close()
 def runsqlstatement(ssql):
   r = ''
   try:
