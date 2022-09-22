@@ -1,4 +1,3 @@
-import mysql.connector
 import datetime
 import sys
 import time
@@ -232,7 +231,7 @@ def answerthequestion_m(question):
   return r
 
 # adding a single-line text input widget
-question = st.text_input('Enter your question: ', 'What are the benefits of structural transformation')
+question = st.text_input('Enter your question: ', 'What are the challenges of oil-based growth?')
 # displaying the entered text
 ss= askquestion(question,'','a',60)
 st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
