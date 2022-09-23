@@ -237,11 +237,13 @@ def answerthequestion_m(question):
   return r
 
 # adding a single-line text input widget
-question = st.text_input('Enter your question: ', 'What are the challenges of oil-based growth?')
+question = st.text_input('Enter your question and press "enter" (Example:What are the challenges of green growth?):','')
+st.markdown("<i>(Retrieving relevant document passages and building the possible answers can take up to 3mn)</i><br><hr>", unsafe_allow_html=True)
 # displaying the entered text
-ss= askquestion(question,'','a',60)
-st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
-st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
-#ss0 = ss[2]
-for ss1 in ss[0][2].split('-@@-'):
-   st.write(ss1)
+if len(question.strip()) > 0:
+    ss= askquestion(question,'','a',60)
+    st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
+    st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
+    #ss0 = ss[2]
+    for ss1 in ss[0][2].split('-@@-'):
+       st.write(ss1)
