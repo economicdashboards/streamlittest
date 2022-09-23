@@ -241,7 +241,7 @@ question = st.text_input('Enter your question and press "enter" (Example:What ar
 st.markdown("<i>(Retrieving relevant document passages and building the possible answers can take up to 3mn)</i><br><hr>", unsafe_allow_html=True)
 # displaying the entered text
 if len(question.strip()) > 0:
-    ss= askquestion(question,'','a',60)
+    ss= askquestion(question,'','a',360)
     st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
     st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
     #ss0 = ss[2]
