@@ -245,5 +245,8 @@ if len(question.strip()) > 0:
     st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
     st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
     #ss0 = ss[2]
-    for ss1 in ss[0][2].split('-@@-'):
-       st.write(ss1)
+    try:
+        for ss1 in ss[0][2].split('-@@-'):
+           st.write(ss1)
+    except:
+        st.markdown('<font color=red>An error occured. Please try again.</font>')
