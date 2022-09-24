@@ -5,6 +5,7 @@ import streamlit as st
 import logging
 import mysql.connector
 from time import sleep
+from datetime import timezone
 
 def todigits(s, n):
   s = s.strip()
@@ -16,6 +17,12 @@ def datestring():
   ct = datetime.datetime.now()
   dt = todigits(str(ct.year),4) + '-' + todigits(str(ct.month),2)+ '-' + todigits(str(ct.day),2)+ '-' + todigits(str(ct.hour),2)+ '-' + todigits(str(ct.minute),2)+ '-' + todigits(str(ct.second),2)
   return dt
+
+def datestring_utc():
+  ct = datetime.datetime.now(timezone.utc)
+  dt = todigits(str(ct.year),4) + '-' + todigits(str(ct.month),2)+ '-' + todigits(str(ct.day),2)+ '-' + todigits(str(ct.hour),2)+ '-' + todigits(str(ct.minute),2)+ '-' + todigits(str(ct.second),2)
+  return dt
+
 connection = mysql.connector.connect(host='sql5.freemysqlhosting.net',
                                          database='sql5521302',
                                          user='sql5521302',
@@ -236,17 +243,61 @@ def answerthequestion_m(question):
     r.append(r0)
   return r
 
+def gettstamp():
+  ts = ''
+  ssql = "SELECT tstamp FROM tstamp ORDER BY tstamp DESC"
+  try:
+    connection = mysql.connector.connect(host='sql5.freemysqlhosting.net',
+                                        database='sql5521302',
+                                        user='sql5521302',
+                                        password='TvCHYlcKBJ'
+                                  )
+    if connection.is_connected():
+        #print("MySQL connection is opened")
+        cursor = connection.cursor()#
+        cursor.execute(ssql)
+        records = cursor.fetchall()
+        #print(records)
+        if len(records) > 0:
+          ts = str(records[0][0]).strip()
+        r = 'Executed : ' + ssql
+        print(r)
+  except Error as e:
+        r = "Error while executing : L"+ ssql + " ---- "
+        print("Error while executing : L"+ ssql + " ---- ", e)
+  finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            #print("MySQL connection is closed")
+  return ts
+
+def tsdiff():
+    ts0 = gettstamp()
+    tsa = ts0.replace("-", "")
+    v0 = 0
+    v0 = int(tsa[3:14])
+    ts1 = datestring_utc()
+    tsb = ts1.replace("-", "")
+    v1 = 0
+    v1 = int(tsb[3:14])
+    tsd = v1 - v0
+    return tsd
+
 # adding a single-line text input widget
 question = st.text_input('Enter your question and press "enter" (Example:What are the challenges of green growth?):','')
 st.markdown("<i>(Retrieving relevant document passages and building the possible answers can take up to 3mn)</i><br><hr>", unsafe_allow_html=True)
 # displaying the entered text
-if len(question.strip()) > 0:
-    ss= askquestion(question,'','a',360)
-    st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
-    st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
-    #ss0 = ss[2]
-    try:
-        for ss1 in ss[0][2].split('-@@-'):
-           st.write(ss1)
-    except:
-        st.markdown('<font color=red>An error occured. Please try again.</font>')
+if tsdiff() > 1000:
+    st.markdown("<b><font color=red><i>It looks like the backend program is not running. Please ask the administrator to start the backend inference program.</i></font><b>", unsafe_allow_html=True)
+else:
+    if len(question.strip()) > 0:
+        ss= askquestion(question,'','a',360)
+        st.markdown("<b><font color=darkred>" + question + "</font><b>", unsafe_allow_html=True)
+        st.markdown("<font color=blue>Best possible answers based on the documents loaded (see more explanations by scrolling down):</font>", unsafe_allow_html=True)
+        #ss0 = ss[2]
+        try:
+            for ss1 in ss[0][2].split('-@@-'):
+               st.write(ss1)
+        except:
+            st.markdown('<font color=red>An error occured. Please try again.</font>')
