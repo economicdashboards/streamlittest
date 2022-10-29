@@ -288,7 +288,8 @@ def tsdiff():
 question = st.text_input('Enter your question and press "enter" (Example:What are the challenges of green growth?):','')
 st.markdown("<i>(Retrieving relevant document passages and building the possible answers can take up to 3mn)</i><br><hr>", unsafe_allow_html=True)
 # displaying the entered text
-if tsdiff() > 1000:
+#if tsdiff() > 1000:
+if False:
     st.markdown("<b><font color=red><i>It looks like the backend program is not running. Please ask the administrator to start the backend inference program.</i></font><b>", unsafe_allow_html=True)
 else:
     if len(question.strip()) > 0:
